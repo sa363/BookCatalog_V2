@@ -21,9 +21,8 @@
 package ru.itfb.bookservice.service;
 
 import ru.itfb.bookservice.model.Book;
+import ru.itfb.bookservice.model.BookByAuthors;
 import ru.itfb.bookservice.model.BookView;
-import ru.itfb.bookservice.model.pojo.AuthorDTO;
-import ru.itfb.bookservice.model.pojo.BookDto;
 
 import java.util.List;
 
@@ -36,6 +35,5 @@ public interface BookCatalogService {
 
     Book updateBookById(Book newBook, Long id);
     boolean removeBookById(Long id);
-
-    List<AuthorDTO> getAuthors(String isbn);
+    BookByAuthors getBookById2(long id);
 }

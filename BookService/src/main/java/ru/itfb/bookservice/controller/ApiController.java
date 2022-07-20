@@ -26,8 +26,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import ru.itfb.bookservice.model.Book;
+import ru.itfb.bookservice.model.BookByAuthors;
 import ru.itfb.bookservice.model.pojo.AuthorDTO;
-import ru.itfb.bookservice.model.pojo.BookDto;
 import ru.itfb.bookservice.service.impl.BookCatalogServiceImpl;
 
 import java.util.List;
@@ -51,9 +51,9 @@ public class ApiController {
 
     @GetMapping("/book/{id}")
     @Counted(value = "getbook")
-    BookDto GetBookById(@PathVariable long id) {
+    BookByAuthors GetBookById(@PathVariable long id) {
         log.info("Get book by id {}", id);
-        return service.getBookById(id, BookDto.class);
+        return service.getBookById2(id);
     }
 
     @PutMapping("/book/{id}")
@@ -68,11 +68,6 @@ public class ApiController {
         return service.removeBookById(id)
                 ? new ResponseEntity<>(HttpStatus.OK)
                 : new ResponseEntity<>(HttpStatus.NOT_MODIFIED);
-    }
-
-    @GetMapping("/book/isbn/{isbn}")
-    List<AuthorDTO> getAuthors(@PathVariable String isbn) {
-        return service.getAuthors(isbn);
     }
 
 

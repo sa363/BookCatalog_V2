@@ -5,14 +5,10 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
                       http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-4.9.xsd">
 
-    <changeSet id="1658328538423-1" author="Sergey Anisimov">
-        <insert tableName="author">
-            <column name="id" value="99999"/>
-            <column name="first_name" value="First"/>
-            <column name="last_name" value="Last"/>
-        </insert>
-        <insert tableName="author_isbn">
-            <column name="author_id" value="99999"/>
+    <changeSet id="1658329851209-1" author="Sergey">
+        <insert tableName="book">
+            <column name="id" valueSequenceNext="hibernate_sequence"/>
+            <column name="name" value="book1"/>
             <column name="isbn" value="000-000"/>
         </insert>
     </changeSet>

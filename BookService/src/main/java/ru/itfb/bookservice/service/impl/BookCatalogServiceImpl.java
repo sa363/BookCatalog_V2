@@ -21,17 +21,21 @@
 package ru.itfb.bookservice.service.impl;
 
 import lombok.extern.slf4j.Slf4j;
+import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeMap;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.client.RestTemplate;
 import ru.itfb.bookservice.exception.BookNotFoundException;
 import ru.itfb.bookservice.interfaces.BookRepository;
 import ru.itfb.bookservice.model.Book;
+import ru.itfb.bookservice.model.BookByAuthors;
+import ru.itfb.bookservice.model.BookDto;
 import ru.itfb.bookservice.model.BookView;
 import ru.itfb.bookservice.model.pojo.AuthorDTO;
 import ru.itfb.bookservice.service.BookCatalogService;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Service
@@ -40,7 +44,7 @@ public class BookCatalogServiceImpl implements BookCatalogService {
 
     private final BookRepository bookRepository;
 
-    private RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     public BookCatalogServiceImpl(BookRepository bookRepository, RestTemplate restTemplate) {
         this.bookRepository = bookRepository;
@@ -71,6 +75,8 @@ public class BookCatalogServiceImpl implements BookCatalogService {
 ////        return bookRepository.findById(id).orElseThrow(() ->
 ////                new BookNotFoundException(String.format("No book with id %s is available", id)));
     }
+
+
 
     @Override
     @Transactional
@@ -104,9 +110,21 @@ public class BookCatalogServiceImpl implements BookCatalogService {
      * @param isbn
      * @return
      */
-    @Override
-    public List<AuthorDTO> getAuthors(String isbn) {
+
+    private List<AuthorDTO> getAuthors(String isbn) {
         AuthorDTO[] authors  = restTemplate.getForObject("http://localhost:8081/api/author/isbn/"+isbn, AuthorDTO[].class);
         return List.of(authors);
+    }
+
+    public BookByAuthors getBookById2(long id) {
+        Book book = bookRepository.getBookById(id, Book.class);
+        BookByAuthors bookByAuthors = convertToDTO(book);
+        bookByAuthors.setAuthors(getAuthors(book.getIsbn()));
+        return bookByAuthors;
+    }
+
+    private BookByAuthors convertToDTO(Book book)  {
+        ModelMapper mapper = new ModelMapper();
+        return mapper.map(book, BookByAuthors.class);
     }
 }

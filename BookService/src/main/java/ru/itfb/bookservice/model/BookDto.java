@@ -1,8 +1,10 @@
-package ru.itfb.bookservice.model.pojo;
+package ru.itfb.bookservice.model;
 
 import lombok.Data;
+import ru.itfb.bookservice.model.pojo.AuthorDTO;
 
 import java.io.Serializable;
+import java.util.List;
 
 @Data
 public class BookDto implements Serializable {
@@ -10,4 +12,5 @@ public class BookDto implements Serializable {
     private final String name;
     private final String review;
     private final String style;
+    private final String isbn;
 }
